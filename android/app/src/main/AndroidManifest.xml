@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.mvizintin.last_fm">
    <application
-        android:label="last_fm"
+        android:label="LastFM"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
