@@ -36,7 +36,7 @@ class ParseJsonTracks extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(top: 10, bottom: 10),
                   child: Text(
-                    "Top artists",
+                    "Top tracks",
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -60,10 +60,7 @@ class ParseJsonTracks extends StatelessWidget {
                             trailing: const Icon(Icons.arrow_forward_ios),
                           ),
                         );
-                      }
-                      //return Text(tracksList[index]["name"]);
-                      //return Text("error");
-                      ),
+                      }),
                 )
               ],
             ),
