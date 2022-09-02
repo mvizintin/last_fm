@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'parseJsonArtists.dart';
+import 'parseJsonTracks.dart';
 
 Future main() async {
   await dotenv.load(fileName: "assets/.env");
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
           title: Center(child: Text("LastFM")),
           //toolbarHeight: 88,
         ),
-        body: ParseJsonArtists(),
+        body: ParseJsonTracks(),
       ),
     );
   }
