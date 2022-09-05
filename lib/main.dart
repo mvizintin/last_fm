@@ -3,6 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'parseJsonArtists.dart';
 import 'parseJsonTracks.dart';
+import 'home.dart';
 
 Future main() async {
   await dotenv.load(fileName: "assets/.env");
@@ -14,15 +15,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      color: Colors.red,
-      home: Scaffold(
-        appBar: AppBar(
-          title: Center(child: Text("LastFM")),
-          //toolbarHeight: 88,
-        ),
-        body: ParseJsonTracks(),
-      ),
-    );
+    return MaterialApp(home: Home());
   }
 }

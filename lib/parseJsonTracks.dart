@@ -9,9 +9,7 @@ import 'dart:async';
 Future<String> Parser() async {
   String? apiKey = dotenv.env["API_KEY"];
   var url = Uri.parse(
-      'http://ws.audioscrobbler.com/2.0/?method=chart.gettoptracks&api_key=' +
-          apiKey.toString() +
-          '&format=json');
+      'http://ws.audioscrobbler.com/2.0/?method=chart.gettoptracks&api_key=$apiKey&format=json');
   var response = await http.get(url);
   return response.body;
 }
@@ -27,46 +25,55 @@ class ParseJsonTracks extends StatelessWidget {
           final parsedJson = jsonDecode(jsonData!);
           final tracksList = parsedJson["tracks"]["track"];
 
-          print(tracksList[0]["name"]);
-
-          return Container(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 10, bottom: 10),
-                  child: Text(
-                    "Top tracks",
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                Expanded(
-                  child: ListView.builder(
-                      itemCount: 50,
-                      itemBuilder: (BuildContext context, int index) {
-                        return Card(
-                          child: ListTile(
-                            title: Text(tracksList[index]["name"]),
-                            subtitle: Column(
-                              children: [
-                                Text("Artist: " +
-                                    tracksList[index]["artist"]["name"]),
-                                Text("Listeners: " +
-                                    tracksList[index]["listeners"]),
-                                Text("Play count: " +
-                                    tracksList[index]["playcount"])
-                              ],
+          return Scaffold(
+            appBar: AppBar(
+              backgroundColor: Colors.red,
+              title: Center(child: Text("Top Tracks")),
+              //toolbarHeight: 88,
+            ),
+            body: Container(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Expanded(
+                    child: ListView.builder(
+                        itemCount: 50,
+                        itemBuilder: (BuildContext context, int index) {
+                          return Card(
+                            child: ListTile(
+                              title: Text(tracksList[index]["name"]),
+                              subtitle: Column(
+                                children: [
+                                  Text("Artist: " +
+                                      tracksList[index]["artist"]["name"]),
+                                  Text("Listeners: " +
+                                      tracksList[index]["listeners"]),
+                                  Text("Play count: " +
+                                      tracksList[index]["playcount"])
+                                ],
+                              ),
+                              trailing: const Icon(Icons.arrow_forward_ios),
                             ),
-                            trailing: const Icon(Icons.arrow_forward_ios),
-                          ),
-                        );
-                      }),
-                )
-              ],
+                          );
+                        }),
+                  )
+                ],
+              ),
             ),
           );
         } else {
-          return CircularProgressIndicator();
+          return Scaffold(
+            appBar: AppBar(
+              backgroundColor: Colors.red,
+              title: Center(child: Text("Top Artists")),
+              //toolbarHeight: 88,
+            ),
+            body: Container(
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [Center(child: CircularProgressIndicator())]),
+            ),
+          );
         }
         return Text("greška");
       },
