@@ -4,32 +4,43 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'dart:async';
+import 'dart:math';
+
+import 'artistInfo.dart';
 
 // ignore: non_constant_identifier_names
-Future<String> Parser() async {
+Future<String> Parser(String term) async {
   String? apiKey = dotenv.env["API_KEY"];
   var url = Uri.parse(
-      'http://ws.audioscrobbler.com/2.0/?method=chart.gettopartists&api_key=$apiKey&format=json');
+      'http://ws.audioscrobbler.com/2.0/?method=artist.search&artist=$term&api_key=$apiKey&format=json');
   var response = await http.get(url);
 
   return response.body;
 }
 
-class ParseJsonArtists extends StatelessWidget {
+class SearchQuerry extends StatelessWidget {
+  final String searchTerm;
+  const SearchQuerry({required this.searchTerm});
+
   @override
   Widget build(BuildContext context) {
+    print(searchTerm);
+
     return FutureBuilder<String>(
-      future: Parser(),
+      future: Parser(searchTerm),
       builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
         if (snapshot.hasData && snapshot.data != "no data") {
           final jsonData = snapshot.data;
           final parsedJson = jsonDecode(jsonData!);
-          final artistsList = parsedJson["artists"]["artist"];
+          final artistsList = parsedJson["results"]["artistmatches"]["artist"];
+
+          print(parsedJson["results"]["opensearch:totalResults"]);
+          print(parsedJson["results"]["opensearch:itemsPerPage"]);
 
           return Scaffold(
             appBar: AppBar(
               backgroundColor: Colors.red,
-              title: Center(child: Text("Top Artists")),
+              title: Center(child: Text(searchTerm)),
             ),
             body: Container(
               child: Column(
@@ -37,7 +48,11 @@ class ParseJsonArtists extends StatelessWidget {
                 children: [
                   Expanded(
                     child: ListView.builder(
-                        itemCount: 50,
+                        itemCount: min(
+                            int.parse(parsedJson["results"]
+                                ["opensearch:totalResults"]),
+                            int.parse(parsedJson["results"]
+                                ["opensearch:itemsPerPage"])),
                         itemBuilder: (BuildContext context, int index) {
                           return Card(
                             child: ListTile(
@@ -46,11 +61,17 @@ class ParseJsonArtists extends StatelessWidget {
                                 children: [
                                   Text("Listeners: " +
                                       artistsList[index]["listeners"]),
-                                  Text("Play count: " +
-                                      artistsList[index]["playcount"])
                                 ],
                               ),
                               trailing: const Icon(Icons.arrow_forward_ios),
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ArtistInfo(),
+                                  ),
+                                );
+                              },
                             ),
                           );
                         }

@@ -29,7 +29,6 @@ class ParseJsonTracks extends StatelessWidget {
             appBar: AppBar(
               backgroundColor: Colors.red,
               title: Center(child: Text("Top Tracks")),
-              //toolbarHeight: 88,
             ),
             body: Container(
               child: Column(
